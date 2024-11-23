@@ -3,8 +3,8 @@
 //
 
 #include "ChessServer.h"
-#include "Connection.cpp"
-#include "GameInstance.cpp"
+#include "Connection.h"
+#include "GameInstance.h"
 #include <iostream>
 #include <unistd.h> // Para close()
 #include <arpa/inet.h> // Para inet_ntoa
@@ -94,8 +94,13 @@ void ChessServer::matchPlayers() {
                   << player1.connection->socket_fd << " y "
                   << player2.connection->socket_fd << std::endl;
 
-        // Crear una nueva instancia de juego
-        GameInstance game(player1, player2);
-        gameThreads.emplace_back(&GameInstance::start, game);
+        auto game = std::make_shared<GameInstance>(player1, player2);
+
+        // Iniciar el juego en un nuevo hilo, pasando el shared_ptr
+        gameThreads.emplace_back([game]() {
+            game->start();
+        });
+
+        // Opcional: Puedes almacenar el shared_ptr en una colección si necesitas mantener referencias
     }
 }

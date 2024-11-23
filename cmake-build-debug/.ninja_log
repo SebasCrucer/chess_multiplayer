@@ -1,8 +1,12 @@
 # ninja log v6
-5	261	1732327855080922769	build.ninja	1d10b2d84e326e72
-2	4181	1732326853446209269	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
-5976	6244	1732326859419213534	chess_multiplayer	3beafc4920027e91
-4181	5976	1732326857624212252	CMakeFiles/chess_multiplayer.dir/src/PlayersQueue.cpp.o	7c7d0a60abf8c5a9
-3	2107	1732328399848309910	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+5	261	1732333236317999253	build.ninja	1d10b2d84e326e72
 8	2767	1732328504107382509	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+5976	6244	1732326859419213534	chess_multiplayer	3beafc4920027e91
 2767	4037	1732328506864384367	CMakeFiles/chess_multiplayer.dir/src/PlayersQueue.cpp.o	7c7d0a60abf8c5a9
+16	11473	1732333561165216905	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+11474	15939	1732333572593224562	CMakeFiles/chess_multiplayer.dir/src/ChessServer.cpp.o	a31b5f10620ec714
+15943	18259	1732333577064227557	CMakeFiles/chess_multiplayer.dir/src/GameInstance.cpp.o	e3c94869fe828eaa
+18259	18892	1732333579379229108	CMakeFiles/chess_multiplayer.dir/src/Player.cpp.o	a4a7110e00e77c2c
+18893	18950	1732333580013229533	CMakeFiles/chess_multiplayer.dir/src/Connection.cpp.o	6ad8f128f9cd8c28
+3	3855	1732333685144288412	CMakeFiles/chess_multiplayer.dir/src/ChessServer.cpp.o	a31b5f10620ec714
+3855	4106	1732333688996290343	chess_multiplayer	95f0c44f93278e3e
