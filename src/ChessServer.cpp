@@ -76,7 +76,7 @@ void ChessServer::acceptConnections() {
                   << ":" << ntohs(client_address.sin_port) << ", socket fd: " << new_socket << std::endl;
 
         // Crear una nueva conexión y jugador
-        auto connection = std::make_shared<Connection>(new_socket);
+        auto const connection = std::make_shared<Connection>(new_socket);
         Player player(connection);
 
         // Añadir el jugador a la cola
