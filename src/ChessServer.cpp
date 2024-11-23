@@ -64,7 +64,7 @@ void ChessServer::stop() {
 
 void ChessServer::acceptConnections() {
     while (running) {
-        sockaddr_in client_address;
+        sockaddr_in client_address{};
         socklen_t client_len = sizeof(client_address);
         int new_socket = accept(server_fd, (struct sockaddr *)&client_address, &client_len);
         if (new_socket < 0) {
@@ -77,7 +77,7 @@ void ChessServer::acceptConnections() {
 
         // Crear una nueva conexión y jugador
         auto connection = std::make_shared<Connection>(new_socket);
-        auto player(connection);
+        Player player(connection);
 
         // Añadir el jugador a la cola
         playersQueue.enqueue(player);
