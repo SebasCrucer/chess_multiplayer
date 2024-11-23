@@ -10,3 +10,6 @@
 18893	18950	1732333580013229533	CMakeFiles/chess_multiplayer.dir/src/Connection.cpp.o	6ad8f128f9cd8c28
 3	3855	1732333685144288412	CMakeFiles/chess_multiplayer.dir/src/ChessServer.cpp.o	a31b5f10620ec714
 3855	4106	1732333688996290343	chess_multiplayer	95f0c44f93278e3e
+5	1585	1732337182486084233	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+1598	6350	1732337184078085283	CMakeFiles/chess_multiplayer.dir/src/ChessServer.cpp.o	a31b5f10620ec714
+6350	7010	1732337188830088417	chess_multiplayer	95f0c44f93278e3e

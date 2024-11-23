@@ -23,7 +23,7 @@ private:
     void matchPlayers();
 
 public:
-    ChessServer(int port);
+    explicit ChessServer(int port);
     ~ChessServer();
 
     void start();

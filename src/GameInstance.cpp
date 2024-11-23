@@ -24,13 +24,13 @@ void GameInstance::runGame() {
     // Por simplicidad, enviaremos mensajes básicos entre los jugadores
 
     // Notificar a los jugadores que han sido emparejados
-    std::string msg = "Has sido emparejado. Comienza el juego.\n";
+    std::string const msg = "Has sido emparejado. Comienza el juego.\n";
     write(player1.connection->socket_fd, msg.c_str(), msg.size());
     write(player2.connection->socket_fd, msg.c_str(), msg.size());
 
-    // Comunicación básica: eco de mensajes
-    char buffer[1024];
+    // Comunicación básica: eco de mensaje
     while (active) {
+        char buffer[1024];
         // Leer del jugador 1 y enviar al jugador 2
         ssize_t bytes_read = read(player1.connection->socket_fd, buffer, sizeof(buffer));
         if (bytes_read <= 0) {

@@ -9,7 +9,7 @@ struct Connection {
     int socket_fd; // Descriptor de socket (ejemplo)
     // Puedes agregar más información relevante, como dirección IP, estado, etc.
 
-    Connection(int fd);
+    explicit Connection(int fd);
     // Otros constructores o métodos si son necesarios
 };
 

@@ -10,7 +10,7 @@
 #include <arpa/inet.h> // Para inet_ntoa
 #include <cstring>
 
-ChessServer::ChessServer(int port) : running(false) {
+ChessServer::ChessServer(int const port = 8080) : running(false) {
     // Crear socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     if (server_fd == 0) {
@@ -19,14 +19,14 @@ ChessServer::ChessServer(int port) : running(false) {
     }
 
     // Configurar la dirección del servidor
-    sockaddr_in address;
+    sockaddr_in address{};
     std::memset(&address, 0, sizeof(address));
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY; // Escuchar en todas las interfaces
     address.sin_port = htons(port);
 
     // Vincular el socket
-    if (bind(server_fd, (struct sockaddr *)&address, sizeof(address)) < 0) {
+    if (bind(server_fd, reinterpret_cast<struct sockaddr *>(&address), sizeof(address)) < 0) {
         perror("bind failed");
         close(server_fd);
         exit(EXIT_FAILURE);
@@ -66,7 +66,7 @@ void ChessServer::acceptConnections() {
     while (running) {
         sockaddr_in client_address{};
         socklen_t client_len = sizeof(client_address);
-        int new_socket = accept(server_fd, (struct sockaddr *)&client_address, &client_len);
+        int new_socket = accept(server_fd, reinterpret_cast<struct sockaddr *>(&client_address), &client_len);
         if (new_socket < 0) {
             perror("accept");
             continue;
