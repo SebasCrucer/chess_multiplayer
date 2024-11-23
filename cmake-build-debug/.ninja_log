@@ -1,0 +1,8 @@
+# ninja log v6
+5	261	1732327855080922769	build.ninja	1d10b2d84e326e72
+2	4181	1732326853446209269	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+5976	6244	1732326859419213534	chess_multiplayer	3beafc4920027e91
+4181	5976	1732326857624212252	CMakeFiles/chess_multiplayer.dir/src/PlayersQueue.cpp.o	7c7d0a60abf8c5a9
+3	2107	1732328399848309910	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+8	2767	1732328504107382509	CMakeFiles/chess_multiplayer.dir/main.cpp.o	68999322e07aa673
+2767	4037	1732328506864384367	CMakeFiles/chess_multiplayer.dir/src/PlayersQueue.cpp.o	7c7d0a60abf8c5a9
