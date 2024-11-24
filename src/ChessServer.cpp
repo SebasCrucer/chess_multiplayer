@@ -13,7 +13,7 @@
 ChessServer::ChessServer(int const port = 8080) : running(false) {
     // Crear socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd == 0) {
+    if (server_fd < 0) {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }

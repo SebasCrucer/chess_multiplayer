@@ -1,3 +1,0 @@
-/home/crucer/CLionProjects/chess_multiplayer/cmake-build-debug/CMakeFiles/chess_multiplayer.dir
-/home/crucer/CLionProjects/chess_multiplayer/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/crucer/CLionProjects/chess_multiplayer/cmake-build-debug/CMakeFiles/rebuild_cache.dir
