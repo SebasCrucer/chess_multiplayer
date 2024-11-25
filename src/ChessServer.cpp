@@ -13,20 +13,30 @@
 ChessServer::ChessServer(int const port = 8080) : running(false) {
     // Crear socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
+    std::cout << server_fd <<std::endl;
+
     if (server_fd < 0) {
         perror("socket failed");
         exit(EXIT_FAILURE);
     }
 
-    // Configurar la dirección del servidor
+    int constexpr opt = 1;
+    if (setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0) {
+        perror("setsockopt failed");
+        close(server_fd);
+        exit(EXIT_FAILURE);
+    }
+
     sockaddr_in address{};
+
     std::memset(&address, 0, sizeof(address));
+
     address.sin_family = AF_INET;
-    address.sin_addr.s_addr = INADDR_ANY; // Escuchar en todas las interfaces
     address.sin_port = htons(port);
+    address.sin_addr.s_addr = INADDR_ANY; // Escuchar en todas las interfaces
 
     // Vincular el socket
-    if (bind(server_fd, reinterpret_cast<struct sockaddr *>(&address), sizeof(address)) < 0) {
+    if (bind(server_fd, reinterpret_cast<sockaddr *>(&address), sizeof(address)) < 0) {
         perror("bind failed");
         close(server_fd);
         exit(EXIT_FAILURE);
@@ -59,7 +69,6 @@ void ChessServer::start() {
 
 void ChessServer::stop() {
     running = false;
-    // Aquí podrías agregar lógica para cerrar conexiones y limpiar recursos
 }
 
 void ChessServer::acceptConnections() {
@@ -100,7 +109,5 @@ void ChessServer::matchPlayers() {
         gameThreads.emplace_back([game]() {
             game->start();
         });
-
-        // Opcional: Puedes almacenar el shared_ptr en una colección si necesitas mantener referencias
     }
 }

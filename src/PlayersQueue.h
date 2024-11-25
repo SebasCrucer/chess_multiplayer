@@ -9,7 +9,6 @@
 #include <queue>
 #include <mutex>
 #include <condition_variable>
-#include <memory>
 
 
 // Clase para manejar la cola de jugadores de manera segura en entornos multihilo

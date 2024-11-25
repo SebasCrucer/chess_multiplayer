@@ -4,16 +4,14 @@
 
 #include "PlayersQueue.h"
 
-#include <utility>
-
 void PlayersQueue::enqueue(const Player& player) {
-    std::lock_guard<std::mutex> lock(mutex_);
+    std::lock_guard lock(mutex_);
     queue_.push(player);
     cv_.notify_one(); // Notifica a un hilo que espera
 }
 
 Player PlayersQueue::dequeue() {
-    std::unique_lock<std::mutex> lock(mutex_);
+    std::unique_lock lock(mutex_);
     cv_.wait(lock, [this] { return !queue_.empty(); }); // Espera hasta que la cola no esté vacía
     Player player = queue_.front();
     queue_.pop();

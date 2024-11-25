@@ -7,7 +7,6 @@
 
 #include "Player.h"
 #include <thread>
-#include <mutex>
 #include <atomic>
 
 class GameInstance {

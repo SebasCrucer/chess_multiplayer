@@ -10,8 +10,6 @@
 
 struct Player {
     std::shared_ptr<Connection> connection;
-    // Puedes agregar más campos relacionados con el jugador si es necesario
-
     explicit Player(std::shared_ptr<Connection> conn);
 };
 

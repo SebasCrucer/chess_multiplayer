@@ -13,10 +13,10 @@
 
 class ChessServer {
 private:
-    int server_fd; // Descriptor del socket del servidor
+    int server_fd; // File descriptor del socket del servidor
     PlayersQueue playersQueue;
-    std::vector<std::thread> gameThreads; // Hilos para las instancias de juego
-    std::vector<std::shared_ptr<GameInstance>> activeGames; // Opcional: Mantener referencias a los juegos activos
+    std::vector<std::thread> gameThreads;
+    std::vector<std::shared_ptr<GameInstance>> activeGames;
     std::atomic<bool> running;
 
     void acceptConnections();
