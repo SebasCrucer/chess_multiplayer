@@ -9,7 +9,7 @@ GameInstance::GameInstance(std::shared_ptr<Player> player1, std::shared_ptr<Play
 }
 
 void GameInstance::start() {
-    // Notify players that they are paired
+    // Notificar emparejado
     player1_->send("PAIR");
     player2_->send("PAIR");
 
@@ -36,14 +36,14 @@ void GameInstance::start() {
             self->playerDisconnected(self->player2_);
         });
 
-    // Keep the game running
+    // mantener juego corriendo
     while (running_) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
 void GameInstance::handleMessage(std::shared_ptr<Player> sender, const std::string& message) {
-    // Echo the message to the other player
+    // Enviar mensajes
     if (sender == player1_) {
         player2_->send(message);
     } else {

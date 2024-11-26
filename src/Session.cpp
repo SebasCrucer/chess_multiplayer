@@ -9,10 +9,10 @@ Session::Session(boost::asio::ip::tcp::socket socket, PlayersQueue& playersQueue
 void Session::start() {
     ws_.async_accept([self = shared_from_this()](boost::system::error_code ec) {
         if (!ec) {
-            // Create a new player and enqueue
+            // crear jugador y añadirlo a cola
             auto player = std::make_shared<Player>(self);
             self->playersQueue_.enqueue(player);
-            // Start reading messages
+            // empezar a enviar mensajes
             self->doRead();
         } else {
             std::cerr << "WebSocket accept error: " << ec.message() << std::endl;
@@ -32,15 +32,12 @@ void Session::onRead(boost::system::error_code ec, std::size_t /*bytesTransferre
         std::string message = boost::beast::buffers_to_string(buffer_.data());
         buffer_.consume(buffer_.size());
 
-        // Call the message handler
         if (messageHandler_) {
             messageHandler_(message);
         }
 
-        // Continue reading
         doRead();
     } else if (ec == boost::beast::websocket::error::closed) {
-        // Connection closed cleanly
         if (closeHandler_) {
             closeHandler_();
         }

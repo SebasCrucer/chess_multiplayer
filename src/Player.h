@@ -4,7 +4,7 @@
 #include <memory>
 #include <boost/beast.hpp>
 
-class Session; // Forward declaration
+class Session;
 
 class Player {
 public:

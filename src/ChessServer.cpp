@@ -17,16 +17,16 @@ ChessServer::~ChessServer() {
 }
 
 void ChessServer::run() {
-    // Start accepting connections
+    // empezar a aceptar conexiones
     doAccept();
 
-    // Start player matching thread
+    // iniciar hilo de match de jugadores
     std::thread([this]() {
         while (running_) {
             auto player1 = playersQueue_.dequeue();
             auto player2 = playersQueue_.dequeue();
 
-            std::cout << "Pairing players: " << player1->id() << " and " << player2->id() << std::endl;
+            std::cout << "Pairing: " << player1->id() << " - " << player2->id() << std::endl;
 
             auto gameInstance = std::make_shared<GameInstance>(player1, player2);
 
@@ -36,14 +36,13 @@ void ChessServer::run() {
                 activeGames_[player2->id()] = gameInstance;
             }
 
-            // Start the game in a new thread
+            // empezar juego en nuevo hilo
             gameThreads_.emplace_back([gameInstance]() {
                 gameInstance->start();
             });
         }
     }).detach();
 
-    // Run the IO context
     ioContext_.run();
 }
 
@@ -57,13 +56,13 @@ void ChessServer::doAccept() {
 void ChessServer::onAccept(boost::system::error_code ec, boost::asio::ip::tcp::socket socket) {
     if (!ec) {
         std::cout << "New connection from " << socket.remote_endpoint() << std::endl;
-        // Create a new session
+        // crear nueva sesión
         std::make_shared<Session>(std::move(socket), playersQueue_, ioContext_)->start();
     } else {
         std::cerr << "Accept error: " << ec.message() << std::endl;
     }
 
-    // Continue accepting connections
+    // seguir aceptando
     if (running_) {
         doAccept();
     }

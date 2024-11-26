@@ -31,7 +31,7 @@ private:
     PlayersQueue playersQueue_;
     std::vector<std::thread> gameThreads_;
 
-    // Map to keep track of active games
+    // mapa de juegos activos
     std::unordered_map<int, std::shared_ptr<GameInstance>> activeGames_;
     std::mutex gamesMutex_;
 };
