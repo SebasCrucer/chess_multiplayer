@@ -1,61 +1,65 @@
-//
-// Created by crucer on 22/11/24.
-//
-
 #include "GameInstance.h"
 #include <iostream>
-#include <unistd.h> // Para read() y write()
+#include <thread>
 
-GameInstance::GameInstance(Player p1, Player p2)
-    : player1(std::move(p1)), player2(std::move(p2)), active(true) {
-}
+#include "Session.h"
 
-GameInstance::~GameInstance() {
-    if (gameThread.joinable()) {
-        gameThread.join();
-    }
+GameInstance::GameInstance(std::shared_ptr<Player> player1, std::shared_ptr<Player> player2)
+    : player1_(player1), player2_(player2), running_(true) {
 }
 
 void GameInstance::start() {
-    gameThread = std::thread(&GameInstance::runGame, this);
+    // Notify players that they are paired
+    player1_->send("PAIR");
+    player2_->send("PAIR");
+
+    std::shared_ptr player1_session = player1_->getSession();
+
+    std::shared_ptr player2_session = player2_->getSession();
+
+    player1_session->setMessageHandler([self = shared_from_this()](const std::string& message) {
+            self->handleMessage(self->player1_, message);
+        });
+
+    player2_session->setMessageHandler(
+        [self = shared_from_this()](const std::string& message) {
+            self->handleMessage(self->player2_, message);
+        });
+
+    player1_session->setCloseHandler(
+        [self = shared_from_this()]() {
+            self->playerDisconnected(self->player1_);
+        });
+
+    player2_session->setCloseHandler(
+        [self = shared_from_this()]() {
+            self->playerDisconnected(self->player2_);
+        });
+
+    // Keep the game running
+    while (running_) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
 
-void GameInstance::runGame() {
-    // Notificar a los jugadores que han sido emparejados
-    std::string const msg = "PAIR";
-    write(player1.connection->socket_fd, msg.c_str(), msg.size());
-    write(player2.connection->socket_fd, msg.c_str(), msg.size());
+void GameInstance::handleMessage(std::shared_ptr<Player> sender, const std::string& message) {
+    // Echo the message to the other player
+    if (sender == player1_) {
+        player2_->send(message);
+    } else {
+        player1_->send(message);
+    }
+}
 
-
-    std::thread([=]() {
-        // Leer del jugador 1 y enviar al jugador 2
-        while (active) {
-            char buffer[1024];
-            const ssize_t bytes_read = read(player1.connection->socket_fd, buffer, sizeof(buffer));
-            if (bytes_read <= 0) {
-                std::cout << "Jugador 1 desconectado.\n";
-                active = false;
-                break;
-            }
-            write(player2.connection->socket_fd, buffer, bytes_read);
-        }
-        close(player1.connection->socket_fd);
-    }).detach();
-
-    std::thread([=]() {
-        // Leer del jugador 1 y enviar al jugador 2
-        while (active) {
-            char buffer[1024];
-            const ssize_t bytes_read = read(player2.connection->socket_fd, buffer, sizeof(buffer));
-            if (bytes_read <= 0) {
-                std::cout << "Jugador 2 desconectado.\n";
-                active = false;
-                break;
-            }
-            write(player1.connection->socket_fd, buffer, bytes_read);
-        }
-        close(player2.connection->socket_fd);
-    }).detach();
-
-
+void GameInstance::playerDisconnected(std::shared_ptr<Player> player) {
+    running_ = false;
+    std::string disconnectMessage = "DISCONNECT";
+    if (player == player1_) {
+        player2_->send(disconnectMessage);
+        player2_->close();
+    } else {
+        player1_->send(disconnectMessage);
+        player1_->close();
+    }
+    std::cout << "Player " << player->id() << " disconnected." << std::endl;
 }

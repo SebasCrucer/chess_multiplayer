@@ -1,28 +1,23 @@
-//
-// Created by crucer on 22/11/24.
-//
-
 #ifndef GAME_INSTANCE_H
 #define GAME_INSTANCE_H
 
-#include "Player.h"
-#include <thread>
+#include <memory>
 #include <atomic>
+#include "Player.h"
 
-class GameInstance {
-private:
-    Player player1;
-    Player player2;
-    std::atomic<bool> active;
-    std::thread gameThread;
-
-    void runGame();
-
+class GameInstance : public std::enable_shared_from_this<GameInstance> {
 public:
-    GameInstance(Player p1, Player p2);
-    ~GameInstance();
+    GameInstance(std::shared_ptr<Player> player1, std::shared_ptr<Player> player2);
 
     void start();
+
+    void handleMessage(std::shared_ptr<Player> sender, const std::string& message);
+    void playerDisconnected(std::shared_ptr<Player> player);
+
+private:
+    std::shared_ptr<Player> player1_;
+    std::shared_ptr<Player> player2_;
+    std::atomic<bool> running_;
 };
 
 #endif // GAME_INSTANCE_H

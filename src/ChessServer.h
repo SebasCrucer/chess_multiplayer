@@ -1,33 +1,39 @@
-//
-// Created by crucer on 22/11/24.
-//
-
 #ifndef CHESS_SERVER_H
 #define CHESS_SERVER_H
 
-#include "PlayersQueue.h"
-#include "GameInstance.h"
+#include <boost/asio.hpp>
+#include <boost/beast.hpp>
 #include <thread>
-#include <vector>
 #include <atomic>
+#include <memory>
+#include <vector>
+#include <unordered_map>
+#include <mutex>
+#include "Player.h"
+#include "GameInstance.h"
+#include "PlayersQueue.h"
 
 class ChessServer {
-private:
-    int server_fd; // File descriptor del socket del servidor
-    PlayersQueue playersQueue;
-    std::vector<std::thread> gameThreads;
-    std::vector<std::shared_ptr<GameInstance>> activeGames;
-    std::atomic<bool> running;
-
-    void acceptConnections();
-    void matchPlayers();
-
 public:
-    explicit ChessServer(int port);
+    explicit ChessServer(unsigned short port);
     ~ChessServer();
 
-    void start();
-    void stop();
+    void run();
+
+private:
+    void doAccept();
+    void onAccept(boost::system::error_code ec, boost::asio::ip::tcp::socket socket);
+
+    boost::asio::io_context ioContext_;
+    boost::asio::ip::tcp::acceptor acceptor_;
+    std::atomic<bool> running_;
+
+    PlayersQueue playersQueue_;
+    std::vector<std::thread> gameThreads_;
+
+    // Map to keep track of active games
+    std::unordered_map<int, std::shared_ptr<GameInstance>> activeGames_;
+    std::mutex gamesMutex_;
 };
 
 #endif // CHESS_SERVER_H
