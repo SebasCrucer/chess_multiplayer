@@ -22,7 +22,5 @@ add_executable(chess_multiplayer main.cpp
         src/GameInstance.cpp
         src/Player.h
         src/Player.cpp
-        src/Connection.h
-        src/Connection.cpp
         src/Session.h
         src/Session.cpp)
